@@ -35,6 +35,12 @@ public class PeopleController {
         return peopleService.findAllPeople(request);
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PersonDto returnPersonById(@PathVariable int id) {
+        return peopleService.findPersonById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto createPerson(@RequestBody @Valid PersonDto personDto) {

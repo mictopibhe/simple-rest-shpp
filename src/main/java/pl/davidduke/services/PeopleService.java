@@ -50,4 +50,13 @@ public class PeopleService {
             throw new PersonNotFoundException(id);
         }
     }
+
+    public PersonDto findPersonById(int id) {
+        Optional<Person> optionalPerson = peopleRepository.findById(id);
+        if (optionalPerson.isPresent()) {
+            return modelMapper.map(optionalPerson.get(), PersonDto.class);
+        } else {
+            throw new PersonNotFoundException(id);
+        }
+    }
 }
