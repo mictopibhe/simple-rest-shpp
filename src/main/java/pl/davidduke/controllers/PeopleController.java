@@ -40,4 +40,10 @@ public class PeopleController {
     public PersonDto createPerson(@RequestBody @Valid PersonDto personDto) {
         return peopleService.createPerson(personDto);
     }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PersonDto updatePerson(@PathVariable("id") int id, @RequestBody @Valid PersonDto personDto) {
+        return peopleService.updatePerson(id, personDto);
+    }
 }
