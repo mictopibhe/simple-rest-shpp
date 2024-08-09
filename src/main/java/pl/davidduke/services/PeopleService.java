@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.davidduke.dto.PersonDto;
 import pl.davidduke.entities.Person;
+import pl.davidduke.exceptions.PersonNotFoundException;
 import pl.davidduke.repositories.PeopleRepository;
+
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,5 +36,27 @@ public class PeopleService {
     public PersonDto createPerson(PersonDto personDto) {
         peopleRepository.save(modelMapper.map(personDto, Person.class));
         return personDto;
+    }
+
+    @Transactional
+    public PersonDto updatePerson(int id, PersonDto personDto) {
+        Optional<Person> optionalPerson = peopleRepository.findById(id);
+        if (optionalPerson.isPresent()) {
+            Person person = modelMapper.map(personDto, Person.class);
+            person.setId(id);
+            peopleRepository.save(person);
+            return personDto;
+        } else {
+            throw new PersonNotFoundException(id);
+        }
+    }
+
+    public PersonDto findPersonById(int id) {
+        Optional<Person> optionalPerson = peopleRepository.findById(id);
+        if (optionalPerson.isPresent()) {
+            return modelMapper.map(optionalPerson.get(), PersonDto.class);
+        } else {
+            throw new PersonNotFoundException(id);
+        }
     }
 }
