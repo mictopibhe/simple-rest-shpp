@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.davidduke.dto.PersonDto;
 import pl.davidduke.entities.Person;
+import pl.davidduke.exceptions.PersonNotFoundException;
 import pl.davidduke.repositories.PeopleRepository;
 
 import java.util.Optional;
@@ -46,7 +47,7 @@ public class PeopleService {
             peopleRepository.save(person);
             return personDto;
         } else {
-            throw new RuntimeException(); // todo
+            throw new PersonNotFoundException(id);
         }
     }
 }
