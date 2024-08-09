@@ -34,7 +34,8 @@ public class PeopleService {
 
     @Transactional
     public PersonDto createPerson(PersonDto personDto) {
-        peopleRepository.save(modelMapper.map(personDto, Person.class));
+        Person savedPerson = peopleRepository.save(modelMapper.map(personDto, Person.class));
+        personDto.setId(savedPerson.getId());
         return personDto;
     }
 
@@ -42,8 +43,8 @@ public class PeopleService {
     public PersonDto updatePerson(int id, PersonDto personDto) {
         Optional<Person> optionalPerson = peopleRepository.findById(id);
         if (optionalPerson.isPresent()) {
+            personDto.setId(id);
             Person person = modelMapper.map(personDto, Person.class);
-            person.setId(id);
             peopleRepository.save(person);
             return personDto;
         } else {
