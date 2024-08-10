@@ -11,17 +11,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.davidduke.dto.PersonDto;
-import pl.davidduke.services.PeopleService;
+import pl.davidduke.services.PersonService;
 
 @RestController
 @RequestMapping("/api/v1/people")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PeopleController {
-    final PeopleService peopleService;
+public class PersonController {
+    final PersonService personService;
 
     @Autowired
-    public PeopleController(PeopleService service) {
-        peopleService = service;
+    public PersonController(PersonService service) {
+        personService = service;
     }
 
     @GetMapping
@@ -32,24 +32,30 @@ public class PeopleController {
             @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection) {
         Sort.Direction direction = sortDirection.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         var request = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(direction, sortBy));
-        return peopleService.findAllPeople(request);
+        return personService.findAllPeople(request);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDto returnPersonById(@PathVariable int id) {
-        return peopleService.findPersonById(id);
+        return personService.findPersonById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto createPerson(@RequestBody @Valid PersonDto personDto) {
-        return peopleService.createPerson(personDto);
+        return personService.createPerson(personDto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDto updatePerson(@PathVariable("id") int id, @RequestBody @Valid PersonDto personDto) {
-        return peopleService.updatePerson(id, personDto);
+        return personService.updatePerson(id, personDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePerson(@PathVariable("id") int id) {
+        personService.deletePerson(id);
     }
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import pl.davidduke.validation.IPN;
 
 import java.time.LocalDate;
 
@@ -31,6 +32,6 @@ public class PersonDto {
     @NotNull(message = "Birthday should not be empty")
     LocalDate birthday;
 
-    @NotBlank
+    @IPN
     String ipn;
 }
