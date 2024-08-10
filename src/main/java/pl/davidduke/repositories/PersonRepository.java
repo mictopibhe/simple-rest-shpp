@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.davidduke.entities.Person;
 
 @Repository
-public interface PeopleRepository extends JpaRepository<Person, Integer> {
+public interface PersonRepository extends JpaRepository<Person, Integer> {
 }
