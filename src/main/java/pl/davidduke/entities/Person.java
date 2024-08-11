@@ -20,15 +20,15 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     String lastName;
 
-    @Column(name = "birthday")
+    @Column(name = "birthday", nullable = false)
     LocalDate birthday;
 
-    @Column(name = "ipn")
+    @Column(name = "ipn", nullable = false)
     String ipn;
 }
