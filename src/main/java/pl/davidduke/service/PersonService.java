@@ -1,4 +1,4 @@
-package pl.davidduke.services;
+package pl.davidduke.service;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.davidduke.dto.PersonDto;
-import pl.davidduke.entities.Person;
-import pl.davidduke.exceptions.PersonNotFoundException;
-import pl.davidduke.repositories.PersonRepository;
+import pl.davidduke.entity.Person;
+import pl.davidduke.exception.PersonNotFoundException;
+import pl.davidduke.repository.PersonRepository;
 
 import java.util.Optional;
 
