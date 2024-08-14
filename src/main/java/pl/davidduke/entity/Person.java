@@ -1,4 +1,4 @@
-package pl.davidduke.entities;
+package pl.davidduke.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

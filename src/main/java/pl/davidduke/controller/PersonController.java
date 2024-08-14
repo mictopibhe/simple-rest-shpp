@@ -1,4 +1,4 @@
-package pl.davidduke.controllers;
+package pl.davidduke.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,7 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.davidduke.dto.PersonDto;
-import pl.davidduke.services.PersonService;
+import pl.davidduke.service.PersonService;
 
 @RestController
 @RequestMapping("/api/v1/people")
@@ -51,7 +51,8 @@ public class PersonController {
             @Parameter(description = "Sort direction, either 'asc' or 'desc'", example = "asc")
             @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection
     ) {
-        Sort.Direction direction = sortDirection.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort.Direction direction =
+                sortDirection.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         var request = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(direction, sortBy));
         return personService.findAllPeople(request);
     }
