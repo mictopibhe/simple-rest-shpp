@@ -11,13 +11,12 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.davidduke.dto.PersonDto;
 import pl.davidduke.service.PersonService;
+
 
 @RestController
 @RequestMapping("/api/v1/people")
@@ -32,29 +31,26 @@ public class PersonController {
 
     @Operation(summary = "Get all people from database",
             description = "Retrieve all people with pagination and sorting. " +
-                    "Use 'sortBy' to specify the sorting field and 'sortDirection' to specify the sort order.")
+                    "Use 'page' and 'size' for pagination, 'sortBy' to specify the sorting field, " +
+                    "and 'sortDirection' to specify the sort order.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Returns a page of people",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(type = "object", implementation = PersonDto.class,
                                     description = "A page containing a list of PersonDto objects"))}
+            ),
+            @ApiResponse(responseCode = "500",
+                    description = "Invalid parameters",
+                    content = @Content
             )
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<PersonDto> returnAllPeople(
-            @Parameter(description = "Pagination information (page number and size)", required = true)
-            Pageable pageable,
-            @Parameter(description = "Field to sort by (e.g., 'lastName')", example = "lastName")
-            @RequestParam(name = "sortBy", defaultValue = "lastName") String sortBy,
-            @Parameter(description = "Sort direction, either 'asc' or 'desc'", example = "asc")
-            @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection
+            Pageable pageable
     ) {
-        Sort.Direction direction =
-                sortDirection.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        var request = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(direction, sortBy));
-        return personService.findAllPeople(request);
+        return personService.findAllPeople(pageable);
     }
 
     @Operation(summary = "Get a person by ID", description = "Returns a specific person by their ID")
@@ -111,7 +107,7 @@ public class PersonController {
                             schema = @Schema(implementation = PersonDto.class))}
             ),
             @ApiResponse(responseCode = "400",
-                    description = "Invalid input, person could not be created due to validation errors",
+                    description = "Invalid input, person could not be updated due to validation errors",
                     content = @Content(mediaType = "application/json")
             ),
             @ApiResponse(
