@@ -8,8 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,10 @@ import pl.davidduke.service.PersonService;
 @RestController
 @RequestMapping("/api/v1/people")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
+@RequiredArgsConstructor
 public class PersonController {
     final PersonService personService;
-
-    @Autowired
-    public PersonController(PersonService service) {
-        personService = service;
-    }
 
     @Operation(summary = "Get all people from database",
             description = "Retrieve all people with pagination and sorting. " +
@@ -50,7 +48,11 @@ public class PersonController {
     public Page<PersonDto> returnAllPeople(
             Pageable pageable
     ) {
-        return personService.findAllPeople(pageable);
+        log.info("Received request to get page people with {} elements", pageable.getPageSize());
+        Page<PersonDto> responsePage = personService.findAllPeople(pageable);
+        log.info("Returned page people with {} elements. Status: {}", responsePage.getTotalElements(), HttpStatus.OK);
+
+        return responsePage;
     }
 
     @Operation(summary = "Get a person by ID", description = "Returns a specific person by their ID")
@@ -72,7 +74,11 @@ public class PersonController {
             @Parameter(description = "ID of the person to retrieve", example = "1")
             @PathVariable int id
     ) {
-        return personService.findPersonById(id);
+        log.info("Received request to retrieve person by ID {}", id);
+        PersonDto foundPerson = personService.findPersonById(id);
+        log.info("Person with specific ID {} was returned. Status: {}", id, HttpStatus.OK);
+
+        return foundPerson;
     }
 
     @Operation(summary = "Create new person and save in the database",
@@ -94,7 +100,11 @@ public class PersonController {
     public PersonDto createPerson(
             @RequestBody @Valid PersonDto personDto
     ) {
-        return personService.createPerson(personDto);
+        log.info("Received request to create a new person: {}", personDto);
+        PersonDto createdPerson = personService.createPerson(personDto);
+        log.info("Person {} was successfully created. Status: {}", createdPerson.getId(), HttpStatus.CREATED);
+
+        return createdPerson;
     }
 
     @Operation(summary = "Update an existing person in the database",
@@ -123,7 +133,10 @@ public class PersonController {
             @PathVariable("id") int id,
             @RequestBody @Valid PersonDto personDto
     ) {
-        return personService.updatePerson(id, personDto);
+        log.info("Received request to update person with ID {}", id);
+        PersonDto updatedPerson = personService.updatePerson(id, personDto);
+        log.info("Person {} was successfully updated. Status: {}", updatedPerson.getId(), HttpStatus.OK);
+        return updatedPerson;
     }
 
     @Operation(summary = "Removed an existing person from the database",
@@ -144,6 +157,8 @@ public class PersonController {
     public void deletePerson(
             @PathVariable("id") int id
     ) {
+        log.info("Received request to delete person with ID {}", id);
         personService.deletePerson(id);
+        log.info("Person with ID {} was successfully deleted. Status: {}", id, HttpStatus.NO_CONTENT);
     }
 }
