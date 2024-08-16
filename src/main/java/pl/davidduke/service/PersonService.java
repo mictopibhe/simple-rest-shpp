@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.davidduke.dto.PersonDto;
 import pl.davidduke.entity.Person;
+import pl.davidduke.exception.IpnAlreadyExistsException;
 import pl.davidduke.exception.PersonNotFoundException;
 import pl.davidduke.repository.PersonRepository;
 
@@ -27,6 +28,10 @@ public class PersonService {
 
     @Transactional
     public PersonDto createPerson(PersonDto personDto) {
+        if (personRepository.findByIpn(personDto.getIpn()).isPresent()) {
+            throw new IpnAlreadyExistsException(personDto.getIpn());
+        }
+
         Person savedPerson = personRepository.save(modelMapper.map(personDto, Person.class));
         personDto.setId(savedPerson.getId());
         return personDto;
@@ -34,10 +39,18 @@ public class PersonService {
 
     @Transactional
     public PersonDto updatePerson(int id, PersonDto personDto) {
-        findPersonById(id);
+        PersonDto foundPersonById = findPersonById(id);
+        if (isIpnExists(personDto, foundPersonById)) {
+            throw new IpnAlreadyExistsException(personDto.getIpn());
+        }
         personDto.setId(id);
         personRepository.save(modelMapper.map(personDto, Person.class));
         return personDto;
+    }
+
+    private boolean isIpnExists(PersonDto personDto, PersonDto foundPersonById) {
+        return !foundPersonById.getIpn().equals(personDto.getIpn()) &&
+                personRepository.findByIpn(personDto.getIpn()).isPresent();
     }
 
     public PersonDto findPersonById(int id) {
