@@ -54,7 +54,8 @@ class PersonControllerTest {
 
     @Test
     void createPersonShouldSaveNewPersonIntoDBAndReturnPersonDtoAndCreatedStatus() throws Exception {
-        when(personService.createPerson(any(PersonDto.class))).thenReturn(personDto);
+        when(personService.createPerson(any(PersonDto.class)))
+                .thenReturn(personDto);
 
         mockMvc
                 .perform(post("/api/v1/people")
@@ -63,18 +64,18 @@ class PersonControllerTest {
                 .andExpect(status()
                         .isCreated())
                 .andExpect(jsonPath("$.id")
-                        .value(1))
+                        .value(personDto.getId()))
                 .andExpect(jsonPath("$.firstName")
-                        .value("Олександр"))
+                        .value(personDto.getFirstName()))
                 .andExpect(jsonPath("$.lastName")
-                        .value("Давидюк"))
+                        .value(personDto.getLastName()))
                 .andExpect(jsonPath("$.birthday")
-                        .value(LocalDate.of(1995, 6, 5).toString()))
+                        .value(personDto.getBirthday().toString()))
                 .andExpect(jsonPath("$.ipn")
-                        .value("2248000331"));
+                        .value(personDto.getIpn()));
 
-
-        verify(personService, times(1)).createPerson(any(PersonDto.class));
+        verify(personService, times(1))
+                .createPerson(any(PersonDto.class));
     }
 
     @Test
@@ -93,22 +94,31 @@ class PersonControllerTest {
         Pageable pageable = PageRequest.of(0, 10,
                 Sort.by("firstName").descending()
                         .and(Sort.by("lastName").descending()));
-        Page<PersonDto> personDtoPage = new PageImpl<>(Collections.singletonList(personDto), pageable, 1);
-        when(personService.findAllPeople(any(Pageable.class))).thenReturn(personDtoPage);
+        Page<PersonDto> personDtoPage =
+                new PageImpl<>(Collections.singletonList(personDto), pageable, 1);
+        when(personService.findAllPeople(any(Pageable.class)))
+                .thenReturn(personDtoPage);
 
         mockMvc
                 .perform(get("/api/v1/people"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.pageable.pageNumber").value(0))
-                .andExpect(jsonPath("$.pageable.pageSize").value(10))
-                .andExpect(jsonPath("$.pageable.sort.sorted").value(true))
-                .andExpect(jsonPath("$.content[0].id").value(1));
+                .andExpect(jsonPath("$.pageable.pageNumber")
+                        .value(pageable.getPageNumber()))
+                .andExpect(jsonPath("$.pageable.pageSize")
+                        .value(pageable.getPageSize()))
+                .andExpect(jsonPath("$.pageable.sort.sorted")
+                        .value(pageable.getSort().isSorted()))
+                .andExpect(jsonPath("$.content[0].id")
+                        .value(personDto.getId()));
 
+        verify(personService, times(1))
+                .findAllPeople(any(Pageable.class));
     }
 
     @Test
     void returnPersonByIdShouldReturnPersonDtoAndStatusOk() throws Exception {
-        when(personService.findPersonById(1)).thenReturn(personDto);
+        when(personService.findPersonById(1))
+                .thenReturn(personDto);
 
         mockMvc
                 .perform(get("/api/v1/people/1"))
@@ -118,7 +128,8 @@ class PersonControllerTest {
 
     @Test
     void returnPersonByIdShouldReturnStatusNotFoundWhenPersonWithSpecifiedIdNotExist() throws Exception {
-        when(personService.findPersonById(2)).thenThrow(new PersonNotFoundException(2));
+        when(personService.findPersonById(2))
+                .thenThrow(new PersonNotFoundException(2));
 
         mockMvc
                 .perform(get("/api/v1/people/2"))
@@ -135,7 +146,9 @@ class PersonControllerTest {
                 .birthday(personDto.getBirthday())
                 .ipn(personDto.getIpn())
                 .build();
-        when(personService.updatePerson(anyInt(), any(PersonDto.class))).thenReturn(updatedPersonDto);
+
+        when(personService.updatePerson(anyInt(), any(PersonDto.class)))
+                .thenReturn(updatedPersonDto);
 
         mockMvc
                 .perform(put("/api/v1/people/1")
@@ -143,20 +156,21 @@ class PersonControllerTest {
                         .content(objectMapper.writeValueAsString(updatedPersonDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id")
-                        .value(1))
+                        .value(updatedPersonDto.getId()))
                 .andExpect(jsonPath("$.firstName")
-                        .value("David"))
+                        .value(updatedPersonDto.getFirstName()))
                 .andExpect(jsonPath("$.lastName")
-                        .value("Duke"))
+                        .value(updatedPersonDto.getLastName()))
                 .andExpect(jsonPath("$.birthday")
-                        .value(personDto.getBirthday().toString()))
+                        .value(updatedPersonDto.getBirthday().toString()))
                 .andExpect(jsonPath("$.ipn")
-                        .value(personDto.getIpn()));
+                        .value(updatedPersonDto.getIpn()));
     }
 
     @Test
     void updatePersonShouldReturnStatusNotFoundWhenPersonWithSpecifiedIdNotExist() throws Exception {
-        when(personService.updatePerson(anyInt(), any(PersonDto.class))).thenThrow(new PersonNotFoundException(2));
+        when(personService.updatePerson(anyInt(), any(PersonDto.class)))
+                .thenThrow(new PersonNotFoundException(2));
 
         mockMvc
                 .perform(put("/api/v1/people/2")
@@ -168,6 +182,7 @@ class PersonControllerTest {
     @Test
     void updatePersonShouldReturnStatusBadRequestWhenNewPersonDataIsInvalid() throws Exception {
         personDto.setFirstName(null);
+
         mockMvc
                 .perform(put("/api/v1/people/2")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -177,7 +192,9 @@ class PersonControllerTest {
 
     @Test
     void deletePersonShouldDeletePersonAndReturnStatusOk() throws Exception {
-        doNothing().when(personService).deletePerson(anyInt());
+        doNothing()
+                .when(personService)
+                .deletePerson(anyInt());
 
         mockMvc
                 .perform(delete("/api/v1/people/1"))
@@ -186,7 +203,9 @@ class PersonControllerTest {
 
     @Test
     void deletePersonShouldReturnStatusNotFoundWhenPersonWithSpecifiedIdNotExist() throws Exception {
-        doThrow(new PersonNotFoundException(2)).when(personService).deletePerson(anyInt());
+        doThrow(new PersonNotFoundException(2))
+                .when(personService)
+                .deletePerson(anyInt());
 
         mockMvc
                 .perform(delete("/api/v1/people/2"))
@@ -195,7 +214,9 @@ class PersonControllerTest {
 
     @Test
     void deletePersonShouldReturnStatusBadRequestWhenPersonIdIsInvalid() throws Exception {
-        doNothing().when(personService).deletePerson(anyInt());
+        doNothing()
+                .when(personService)
+                .deletePerson(anyInt());
 
         mockMvc
                 .perform(delete("/api/v1/people/asd"))
