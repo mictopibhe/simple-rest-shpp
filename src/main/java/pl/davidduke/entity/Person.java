@@ -11,12 +11,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "Person")
+@Table
 public class Person {
     @Id
-    @Column(name = "id")
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
@@ -26,9 +27,9 @@ public class Person {
     @Column(name = "last_name", nullable = false)
     String lastName;
 
-    @Column(name = "birthday", nullable = false)
+    @Column(nullable = false)
     LocalDate birthday;
 
-    @Column(name = "ipn", nullable = false)
+    @Column(nullable = false)
     String ipn;
 }

@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PersonDto {
 
