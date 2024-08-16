@@ -29,11 +29,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class PersonServiceTest {
+    final ModelMapper MAPPER = new ModelMapper();
     @Mock
     PersonRepository repository;
     @Mock
     ModelMapper modelMapperMock;
-    ModelMapper mapper = new ModelMapper();
 
     @InjectMocks
     PersonService service;
@@ -51,7 +51,7 @@ class PersonServiceTest {
                 .birthday(LocalDate.of(1995, 6, 5))
                 .ipn("2248000331")
                 .build();
-        personDto = mapper.map(person, PersonDto.class);
+        personDto = MAPPER.map(person, PersonDto.class);
     }
 
     @Test
@@ -106,15 +106,17 @@ class PersonServiceTest {
 
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(person));
-        when(modelMapperMock.map(updatedPersonDto, Person.class))
-                .thenReturn(updatedPerson);
+        when(modelMapperMock.map(any(Person.class), eq(PersonDto.class)))
+                .thenReturn(personDto);
+        when(modelMapperMock.map(any(PersonDto.class), eq(Person.class)))
+                .thenReturn(person);
         when(repository.save(any(Person.class)))
                 .thenReturn(updatedPerson);
 
         service.updatePerson(1, updatedPersonDto);
 
         verify(repository, times(1)).findById(anyInt());
-        verify(modelMapperMock, times(1)).map(updatedPersonDto, Person.class);
+        verify(modelMapperMock, times(1)).map(any(PersonDto.class), eq(Person.class));
         verify(repository, times(1)).save(any(Person.class));
     }
 
@@ -155,9 +157,11 @@ class PersonServiceTest {
 
     @Test
     void deletePersonShouldDeletePersonWithSpecifiedIdWhenPersonExist() {
-        when(repository.findById(1))
+        when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(person));
-        doNothing().when(repository).deleteById(1);
+        when(modelMapperMock.map(person, PersonDto.class))
+                .thenReturn(personDto);
+        doNothing().when(repository).deleteById(anyInt());
 
         service.deletePerson(1);
 
