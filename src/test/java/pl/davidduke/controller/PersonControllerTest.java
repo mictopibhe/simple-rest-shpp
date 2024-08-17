@@ -151,7 +151,7 @@ class PersonControllerTest {
                 .thenReturn(updatedPersonDto);
 
         mockMvc
-                .perform(put("/api/v1/people/1")
+                .perform(patch("/api/v1/people/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedPersonDto)))
                 .andExpect(status().isOk())
