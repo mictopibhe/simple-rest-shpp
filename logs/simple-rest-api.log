@@ -182,3 +182,54 @@ java.lang.NullPointerException: Cannot invoke "String.isBlank()" because "s" is 
 2024-08-16 14:23:25 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-08-16 14:23:25 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2024-08-16 14:23:25 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-08-16 14:26:27 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-08-16 14:26:27 [main] INFO  p.d.SimpleRestShppApplicationTests - Starting SimpleRestShppApplicationTests using Java 17.0.11 with PID 5812 (started by micto in C:\Users\micto\IdeaProjects\School++\simple-rest-shpp)
+2024-08-16 14:26:27 [main] INFO  p.d.SimpleRestShppApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2024-08-16 14:26:28 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-08-16 14:26:28 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 50 ms. Found 1 JPA repository interface.
+2024-08-16 14:26:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-08-16 14:26:29 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:mydb user=SA
+2024-08-16 14:26:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-08-16 14:26:29 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-08-16 14:26:29 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-08-16 14:26:29 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-08-16 14:26:29 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-08-16 14:26:29 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-08-16 14:26:30 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-08-16 14:26:30 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-08-16 14:26:31 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-08-16 14:26:32 [main] INFO  p.d.SimpleRestShppApplicationTests - Started SimpleRestShppApplicationTests in 5.58 seconds (process running for 9.505)
+2024-08-16 14:26:32 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [pl.davidduke.controller.PersonControllerTest]: PersonControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-08-16 14:26:32 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration pl.davidduke.SimpleRestShppApplication for test class pl.davidduke.controller.PersonControllerTest
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonControllerTest - Starting PersonControllerTest using Java 17.0.11 with PID 5812 (started by micto in C:\Users\micto\IdeaProjects\School++\simple-rest-shpp)
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonControllerTest - No active profile set, falling back to 1 default profile: "default"
+2024-08-16 14:26:32 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-08-16 14:26:32 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-08-16 14:26:32 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonControllerTest - Started PersonControllerTest in 0.198 seconds (process running for 9.786)
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to get page people with 20 elements
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Returned page people with 1 elements. Status: 200 OK
+2024-08-16 14:26:32 [main] WARN  o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$PlainPageSerializationWarning - Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2024-08-16 14:26:32 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'int'; For input string: "asd"]
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to update person with ID 1
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Person 1 was successfully updated. Status: 200 OK
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to create a new person: PersonDto(id=1, firstName=Олександр, lastName=Давидюк, birthday=1995-06-05, ipn=2248000331)
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Person 1 was successfully created. Status: 201 CREATED
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to retrieve person by ID 1
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Person with specific ID 1 was returned. Status: 200 OK
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to update person with ID 2
+2024-08-16 14:26:32 [main] ERROR p.d.util.GlobalExceptionHandler - Person with ID 2 not found. Status: 404 NOT_FOUND
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to delete person with ID 1
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Person with ID 1 was successfully deleted. Status: 204 NO_CONTENT
+2024-08-16 14:26:32 [main] ERROR p.d.util.GlobalExceptionHandler - firstName: must not be blank Status: 400 BAD_REQUEST
+2024-08-16 14:26:32 [main] ERROR p.d.util.GlobalExceptionHandler - firstName: must not be blank Status: 400 BAD_REQUEST
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to delete person with ID 2
+2024-08-16 14:26:32 [main] ERROR p.d.util.GlobalExceptionHandler - Person with ID 2 not found. Status: 404 NOT_FOUND
+2024-08-16 14:26:32 [main] INFO  p.d.controller.PersonController - Received request to retrieve person by ID 2
+2024-08-16 14:26:32 [main] ERROR p.d.util.GlobalExceptionHandler - Person with ID 2 not found. Status: 404 NOT_FOUND
+2024-08-16 14:26:32 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-08-16 14:26:32 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-08-16 14:26:32 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

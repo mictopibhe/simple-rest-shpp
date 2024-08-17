@@ -126,7 +126,7 @@ public class PersonController {
                     content = @Content(mediaType = "application/json")
             )
     })
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDto updatePerson(
             @Parameter(description = "ID of the person to update", example = "1")
