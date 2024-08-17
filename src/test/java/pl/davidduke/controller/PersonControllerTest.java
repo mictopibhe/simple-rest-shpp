@@ -173,7 +173,7 @@ class PersonControllerTest {
                 .thenThrow(new PersonNotFoundException(2));
 
         mockMvc
-                .perform(put("/api/v1/people/2")
+                .perform(patch("/api/v1/people/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(personDto)))
                 .andExpect(status().isNotFound());
@@ -184,7 +184,7 @@ class PersonControllerTest {
         personDto.setFirstName(null);
 
         mockMvc
-                .perform(put("/api/v1/people/2")
+                .perform(patch("/api/v1/people/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(personDto)))
                 .andExpect(status().isBadRequest());
