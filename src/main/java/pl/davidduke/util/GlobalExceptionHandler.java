@@ -30,11 +30,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<String> handlePersonNotFoundException(PersonNotFoundException e) {
         logError(e.getMessage(), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
     }
     
     @ExceptionHandler(IpnAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    //todo: або аноташка зі статусом або статус в респонсентіті
     public ResponseEntity<String> handleIpnAlreadyExistsException(IpnAlreadyExistsException e) {
         logError(e.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

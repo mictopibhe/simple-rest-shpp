@@ -11,8 +11,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.davidduke.dto.PersonDto;
@@ -31,22 +33,20 @@ public class PersonController {
             description = "Retrieve all people with pagination and sorting. " +
                     "Use 'page' and 'size' for pagination, 'sortBy' to specify the sorting field, " +
                     "and 'sortDirection' to specify the sort order.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Returns a page of people",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(type = "object", implementation = PersonDto.class,
-                                    description = "A page containing a list of PersonDto objects"))}
-            ),
-            @ApiResponse(responseCode = "500",
-                    description = "Invalid parameters",
-                    content = @Content
-            )
-    })
+    @ApiResponse(responseCode = "200",
+            description = "Returns a page of people",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(type = "object", implementation = PersonDto.class,
+                            description = "A page containing a list of PersonDto objects"))}
+    )
+    @ApiResponse(responseCode = "500",
+            description = "Invalid parameters",
+            content = @Content
+    )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<PersonDto> returnAllPeople(
-            Pageable pageable
+            @ParameterObject Pageable pageable
     ) {
         log.info("Received request to get page people with {} elements", pageable.getPageSize());
         Page<PersonDto> responsePage = personService.findAllPeople(pageable);
@@ -142,7 +142,7 @@ public class PersonController {
     @Operation(summary = "Removed an existing person from the database",
             description = "Removed a specified person from the database.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "204",
                     description = "Person was successfully removed from the database",
                     content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400",

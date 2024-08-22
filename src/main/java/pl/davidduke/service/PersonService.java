@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import pl.davidduke.dto.PersonDto;
 import pl.davidduke.entity.Person;
 import pl.davidduke.exception.IpnAlreadyExistsException;
@@ -20,10 +21,12 @@ import pl.davidduke.repository.PersonRepository;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PersonService {
     final PersonRepository personRepository;
+    //todo мапстракт
     final ModelMapper modelMapper;
 
     public Page<PersonDto> findAllPeople(Pageable pageable) {
-        return personRepository.findAll(pageable).map(person -> modelMapper.map(person, PersonDto.class));
+        return personRepository.findAll(pageable).map(person ->
+                modelMapper.map(person, PersonDto.class));
     }
 
     @Transactional
@@ -54,6 +57,7 @@ public class PersonService {
     }
 
     public PersonDto findPersonById(int id) {
+//       todo: new ResponseStatusException();
         return personRepository.findById(id)
                 .map(person -> modelMapper.map(person, PersonDto.class))
                 .orElseThrow(() -> new PersonNotFoundException(id));
