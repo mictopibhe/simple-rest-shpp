@@ -17,9 +17,7 @@ import java.time.LocalDate;
 @Builder
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PersonDto {
-    int id;
-
+public class RequestPersonDto {
     @NotBlank
     @Size(min = 2, max = 100, message = "The first name must contain between 2 and 100 characters")
     String firstName;

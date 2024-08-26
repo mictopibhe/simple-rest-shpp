@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class IPNImplTest {
 
-    IPNImpl validator = new IPNImpl();
+    final IPNImpl validator = new IPNImpl();
 
     @Test
     void isValidShouldReturnTrueWhenIPNIsValid() {

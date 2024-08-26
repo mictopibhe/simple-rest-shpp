@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import pl.davidduke.dto.PersonDto;
 import pl.davidduke.entity.Person;
 import pl.davidduke.exception.PersonNotFoundException;
 import pl.davidduke.repository.PersonRepository;
@@ -39,7 +38,7 @@ class PersonServiceTest {
     PersonService service;
 
     Person person;
-    PersonDto personDto;
+    ResponsePersonDto personDto;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +50,7 @@ class PersonServiceTest {
                 .birthday(LocalDate.of(1995, 6, 5))
                 .ipn("2248000331")
                 .build();
-        personDto = MAPPER.map(person, PersonDto.class);
+        personDto = MAPPER.map(person, ResponsePersonDto.class);
     }
 
     @Test
@@ -62,17 +61,17 @@ class PersonServiceTest {
 
         when(repository.findAll(pageable))
                 .thenReturn(peoplePage);
-        when(modelMapperMock.map(person, PersonDto.class))
+        when(modelMapperMock.map(person, ResponsePersonDto.class))
                 .thenReturn(personDto);
 
-        Page<PersonDto> result = service.findAllPeople(pageable);
+        Page<ResponsePersonDto> result = service.findAllPeople(pageable);
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals(personDto, result.getContent().get(0));
 
         verify(repository, times(1)).findAll(pageable);
-        verify(modelMapperMock, times(1)).map(person, PersonDto.class);
+        verify(modelMapperMock, times(1)).map(person, ResponsePersonDto.class);
     }
 
     @Test
@@ -82,7 +81,7 @@ class PersonServiceTest {
         when(modelMapperMock.map(personDto, Person.class))
                 .thenReturn(person);
 
-        PersonDto result = service.createPerson(personDto);
+        ResponsePersonDto result = service.createPerson(personDto);
 
         assertNotNull(result);
 
@@ -92,7 +91,7 @@ class PersonServiceTest {
 
     @Test
     void updatePersonShouldReturnUpdatedPersonDto() {
-        PersonDto updatedPersonDto = personDto;
+        ResponsePersonDto updatedPersonDto = personDto;
         updatedPersonDto.setFirstName("David");
         updatedPersonDto.setLastName("Duke");
         Person updatedPerson = Person
@@ -106,9 +105,9 @@ class PersonServiceTest {
 
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(person));
-        when(modelMapperMock.map(any(Person.class), eq(PersonDto.class)))
+        when(modelMapperMock.map(any(Person.class), eq(ResponsePersonDto.class)))
                 .thenReturn(personDto);
-        when(modelMapperMock.map(any(PersonDto.class), eq(Person.class)))
+        when(modelMapperMock.map(any(ResponsePersonDto.class), eq(Person.class)))
                 .thenReturn(person);
         when(repository.save(any(Person.class)))
                 .thenReturn(updatedPerson);
@@ -116,7 +115,7 @@ class PersonServiceTest {
         service.updatePerson(1, updatedPersonDto);
 
         verify(repository, times(1)).findById(anyInt());
-        verify(modelMapperMock, times(1)).map(any(PersonDto.class), eq(Person.class));
+        verify(modelMapperMock, times(1)).map(any(ResponsePersonDto.class), eq(Person.class));
         verify(repository, times(1)).save(any(Person.class));
     }
 
@@ -135,13 +134,13 @@ class PersonServiceTest {
     void findPersonByIdShouldReturnPersonDtoWhenPersonWithSpecifiedIdExist() {
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(person));
-        when(modelMapperMock.map(person, PersonDto.class))
+        when(modelMapperMock.map(person, ResponsePersonDto.class))
                 .thenReturn(personDto);
 
         service.findPersonById(1);
 
         verify(repository, times(1)).findById(anyInt());
-        verify(modelMapperMock, times(1)).map(person, PersonDto.class);
+        verify(modelMapperMock, times(1)).map(person, ResponsePersonDto.class);
     }
 
     @Test
@@ -159,7 +158,7 @@ class PersonServiceTest {
     void deletePersonShouldDeletePersonWithSpecifiedIdWhenPersonExist() {
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(person));
-        when(modelMapperMock.map(person, PersonDto.class))
+        when(modelMapperMock.map(person, ResponsePersonDto.class))
                 .thenReturn(personDto);
         doNothing().when(repository).deleteById(anyInt());
 
