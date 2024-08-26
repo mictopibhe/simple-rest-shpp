@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.davidduke.dto.PersonDto;
 import pl.davidduke.exception.PersonNotFoundException;
 import pl.davidduke.service.PersonService;
 
@@ -35,7 +34,7 @@ class PersonControllerTest {
     @MockBean
     PersonService personService;
 
-    PersonDto personDto;
+    ResponsePersonDto personDto;
     ObjectMapper objectMapper;
 
     @BeforeEach
@@ -43,7 +42,7 @@ class PersonControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        personDto = PersonDto.builder()
+        personDto = ResponsePersonDto.builder()
                 .id(1)
                 .firstName("Олександр")
                 .lastName("Давидюк")
@@ -54,7 +53,7 @@ class PersonControllerTest {
 
     @Test
     void createPersonShouldSaveNewPersonIntoDBAndReturnPersonDtoAndCreatedStatus() throws Exception {
-        when(personService.createPerson(any(PersonDto.class)))
+        when(personService.createPerson(any(ResponsePersonDto.class)))
                 .thenReturn(personDto);
 
         mockMvc
@@ -75,7 +74,7 @@ class PersonControllerTest {
                         .value(personDto.getIpn()));
 
         verify(personService, times(1))
-                .createPerson(any(PersonDto.class));
+                .createPerson(any(ResponsePersonDto.class));
     }
 
     @Test
@@ -94,7 +93,7 @@ class PersonControllerTest {
         Pageable pageable = PageRequest.of(0, 10,
                 Sort.by("firstName").descending()
                         .and(Sort.by("lastName").descending()));
-        Page<PersonDto> personDtoPage =
+        Page<ResponsePersonDto> personDtoPage =
                 new PageImpl<>(Collections.singletonList(personDto), pageable, 1);
         when(personService.findAllPeople(any(Pageable.class)))
                 .thenReturn(personDtoPage);
@@ -138,7 +137,7 @@ class PersonControllerTest {
 
     @Test
     void updatePersonShouldUpdatePersonAndReturnStatusOkWhenPersonExistAndNewDataIsValid() throws Exception {
-        PersonDto updatedPersonDto = PersonDto
+        ResponsePersonDto updatedPersonDto = ResponsePersonDto
                 .builder()
                 .id(personDto.getId())
                 .firstName("David")
@@ -147,7 +146,7 @@ class PersonControllerTest {
                 .ipn(personDto.getIpn())
                 .build();
 
-        when(personService.updatePerson(anyInt(), any(PersonDto.class)))
+        when(personService.updatePerson(anyInt(), any(ResponsePersonDto.class)))
                 .thenReturn(updatedPersonDto);
 
         mockMvc
@@ -169,7 +168,7 @@ class PersonControllerTest {
 
     @Test
     void updatePersonShouldReturnStatusNotFoundWhenPersonWithSpecifiedIdNotExist() throws Exception {
-        when(personService.updatePerson(anyInt(), any(PersonDto.class)))
+        when(personService.updatePerson(anyInt(), any(ResponsePersonDto.class)))
                 .thenThrow(new PersonNotFoundException(2));
 
         mockMvc
